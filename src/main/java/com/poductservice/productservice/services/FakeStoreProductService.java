@@ -1,7 +1,9 @@
 package com.poductservice.productservice.services;
 
+import ch.qos.logback.core.util.PropertySetterException;
 import com.poductservice.productservice.dtos.FakeStoreProductDto;
 import com.poductservice.productservice.dtos.GenericProductDto;
+import com.poductservice.productservice.exceptions.ProductNotFoundException;
 import org.apache.commons.logging.Log;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpLogging;
@@ -27,12 +29,15 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public GenericProductDto getProductById(Long id) {
+    public GenericProductDto getProductById(Long id) throws ProductNotFoundException {
         RestTemplate restTemplate = this.restTemplateBuilder.build();
-        ResponseEntity<FakeStoreProductDto> ob
+        ResponseEntity<FakeStoreProductDto> responseEntity
                 = restTemplate.getForEntity(specificProductUrl, FakeStoreProductDto.class, id);
 
-        return convertToGenericProductDto(ob.getBody());
+        if(responseEntity ==null || responseEntity.getBody()==null){
+            throw new ProductNotFoundException("Product not found for id : "+id);
+        }
+        return convertToGenericProductDto(responseEntity.getBody());
     }
 
     @Override
@@ -63,7 +68,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public GenericProductDto updateProductById(Long id) {
+    public GenericProductDto updateProductById(Long id) throws ProductNotFoundException {
         GenericProductDto genericProductDto = getProductById(id);
         genericProductDto.setCategory("xyz");
 

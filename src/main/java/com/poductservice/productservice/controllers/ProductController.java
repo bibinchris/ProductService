@@ -1,10 +1,11 @@
 package com.poductservice.productservice.controllers;
 
-import com.poductservice.productservice.dtos.FakeStoreProductDto;
 import com.poductservice.productservice.dtos.GenericProductDto;
+import com.poductservice.productservice.exceptions.ProductNotFoundException;
 import com.poductservice.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public GenericProductDto getProductById(@PathVariable("id") Long id){
+    public GenericProductDto getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
         return productService.getProductById(id);
     }
 
@@ -40,7 +41,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public GenericProductDto updateProductById(@PathVariable("id") Long id){
+    public GenericProductDto updateProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
         return productService.updateProductById(id);
     }
 }
