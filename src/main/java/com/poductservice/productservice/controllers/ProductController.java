@@ -5,7 +5,6 @@ import com.poductservice.productservice.exceptions.ProductNotFoundException;
 import com.poductservice.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private ProductService productService;
+    private final ProductService productService;
 
     @Autowired
     public ProductController(@Qualifier("fakeStoreProductService") ProductService productService) {
@@ -26,17 +25,17 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<GenericProductDto> getAllProducts(){
+    public List<GenericProductDto> getAllProducts() throws ProductNotFoundException {
         return productService.getAllProducts();
     }
 
     @DeleteMapping("/{id}")
-    public GenericProductDto deleteProductById(@PathVariable("id") Long id){
+    public GenericProductDto deleteProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
         return productService.deleteProductById(id);
     }
 
     @PostMapping
-    public GenericProductDto createProduct(@RequestBody GenericProductDto genericProductDto){
+    public GenericProductDto createProduct(@RequestBody GenericProductDto genericProductDto) throws ProductNotFoundException {
         return productService.createProduct(genericProductDto);
     }
 
