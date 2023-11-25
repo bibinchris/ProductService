@@ -4,6 +4,7 @@ import com.poductservice.productservice.dtos.FakeStoreProductDto;
 import com.poductservice.productservice.dtos.GenericProductDto;
 import com.poductservice.productservice.exceptions.ProductNotFoundException;
 import com.poductservice.productservice.thirdPartyClients.ThirdPartyInterface;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,15 @@ import java.util.List;
 @Component
 public class FakeStoreClient implements ThirdPartyInterface {
     private final RestTemplateBuilder restTemplateBuilder;
-    private final String genericProductUrl = "https://fakestoreapi.com/products";
-    private final String specificProductUrl = "https://fakestoreapi.com/products/{id}";
+    private final String genericProductUrl;
+    private final String specificProductUrl;
 
-    public FakeStoreClient(RestTemplateBuilder restTemplateBuilder) {
+    public FakeStoreClient(@Value("${fakestore.api.url}") String fakeStoreUrl,
+                           @Value("${fakestore.api.path.products}") String pathForProducts,
+                           RestTemplateBuilder restTemplateBuilder) {
         this.restTemplateBuilder = restTemplateBuilder;
+        this.genericProductUrl = fakeStoreUrl + pathForProducts;
+        this.specificProductUrl = fakeStoreUrl + pathForProducts + "/{id}";
     }
 
     @Override
