@@ -16,12 +16,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class FakeStoreAdaptor implements ThirdPartyInterface {
+public class FakeStoreClient implements ThirdPartyInterface {
     private final RestTemplateBuilder restTemplateBuilder;
     private final String genericProductUrl = "https://fakestoreapi.com/products";
     private final String specificProductUrl = "https://fakestoreapi.com/products/{id}";
 
-    public FakeStoreAdaptor(RestTemplateBuilder restTemplateBuilder) {
+    public FakeStoreClient(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplateBuilder = restTemplateBuilder;
     }
 
