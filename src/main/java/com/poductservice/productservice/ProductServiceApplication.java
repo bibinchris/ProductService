@@ -44,7 +44,7 @@ public class ProductServiceApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 //        testInheritanceRelations();
 
         Category category = new Category();
