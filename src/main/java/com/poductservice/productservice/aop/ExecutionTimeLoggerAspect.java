@@ -12,16 +12,16 @@ import org.springframework.stereotype.Component;
 public class ExecutionTimeLoggerAspect {
 
     @Around("@annotation(executionTimeLogger)")
-    public Object executionTimeLogger(ProceedingJoinPoint proceedingJoinPoint, ExecutionTimeLogger executionTimeLogger){
+    public Object executionTimeLogger(ProceedingJoinPoint joinPoint, ExecutionTimeLogger executionTimeLogger){
         try{
             long start = System.currentTimeMillis();
-            Object proceed = proceedingJoinPoint.proceed();
+            Object proceed = joinPoint.proceed();
             long execution = System.currentTimeMillis() - start;
 
-            log.info("{} method was executed in time {}(millisecond)", proceedingJoinPoint.getSignature().getName(), execution);
+            log.info("{} method was executed in time {}(millisecond)", joinPoint.getSignature().getName(), execution);
             return proceed;
         }catch(Throwable t){
-            log.error("Error while calculating execution time for method {}", proceedingJoinPoint.getSignature(), t);
+            log.error("Error while calculating execution time for method {}", joinPoint.getSignature(), t);
             return null;
         }
     }

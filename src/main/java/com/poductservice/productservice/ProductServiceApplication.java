@@ -8,14 +8,19 @@ import com.poductservice.productservice.repositories.PriceRepository;
 import com.poductservice.productservice.models.Product;
 import com.poductservice.productservice.repositories.CategoryRepository;
 import com.poductservice.productservice.repositories.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class ProductServiceApplication implements CommandLineRunner {
 
     private final MentorRepository mentorRepository;
@@ -44,12 +49,20 @@ public class ProductServiceApplication implements CommandLineRunner {
         SpringApplication.run(ProductServiceApplication.class, args);
     }
 
+    /**
+     * in lazy loading data will be only fetch when we call it explicitly
+     * @Transactional is used to call lazy loading explicitly
+     * @param args
+     */
+    @Transactional
     @Override
     public void run(String... args) {
 //        testInheritanceRelations();
-
 //        saveRecordsInDB();
+//        fetchCategoryFromDB();
+        fetchProductFromDB();
     }
+
 
     private void saveRecordsInDB() {
         Category category = new Category();
@@ -70,6 +83,41 @@ public class ProductServiceApplication implements CommandLineRunner {
         Product savedProduct = productRepository.save(product);
     }
 
+
+    public void fetchCategoryFromDB(){
+        Optional<Category> allCategory = categoryRepository.findById(UUID.fromString("4856ef34-15e5-4488-b478-65efec9aa1b9"));
+        Category category =  allCategory.get();
+        System.out.println("category.getName() = " + category.getName());
+        System.out.println("getDescription = " + category.getProducts().get(0).getDescription());
+    }
+
+
+    public void fetchProductFromDB(){
+        List<Product> allCategory = productRepository.findAll();
+        for(Product p : allCategory){
+            System.out.println("p1 = " + p.getDescription());
+        }
+
+        List<Product> allCategory1 = productRepository.findByTittle("iPhone 15");
+        for(Product p : allCategory1){
+            System.out.println("p2 = " + p.getDescription());
+        }
+
+        List<Product> allCategory2 = productRepository.findByTittleAndDescription("iPhone 15", "Best iPhone ever");
+        for(Product p : allCategory2){
+            System.out.println("p3 = " + p.getDescription());
+        }
+
+        List<Product> allCategory3 = productRepository.findByPrice_ValueGreaterThan(50000);
+        for(Product p : allCategory3){
+            System.out.println("p4 = " + p.getDescription());
+        }
+
+        List<Product> allCategory4 = productRepository.findAllProductByCustomQuery();
+        for(Product p : allCategory4){
+            System.out.println("p4 = " + p.getDescription());
+        }
+    }
     private void testInheritanceRelations() {
         Mentor mentor = new Mentor();
         mentor.setName("Bibin");
