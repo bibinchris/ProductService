@@ -1,5 +1,6 @@
 package com.poductservice.productservice;
 
+import com.poductservice.productservice.aop.ExecutionTimeLogger;
 import com.poductservice.productservice.inheritanceRelations.singleTable.*;
 import com.poductservice.productservice.models.Category;
 import com.poductservice.productservice.models.Price;
@@ -47,6 +48,10 @@ public class ProductServiceApplication implements CommandLineRunner {
     public void run(String... args) {
 //        testInheritanceRelations();
 
+//        saveRecordsInDB();
+    }
+
+    private void saveRecordsInDB() {
         Category category = new Category();
         category.setName("Apple Device");
 

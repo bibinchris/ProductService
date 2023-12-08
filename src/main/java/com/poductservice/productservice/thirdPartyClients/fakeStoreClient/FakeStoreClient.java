@@ -1,9 +1,11 @@
 package com.poductservice.productservice.thirdPartyClients.fakeStoreClient;
 
+import com.poductservice.productservice.aop.ExecutionTimeLogger;
 import com.poductservice.productservice.dtos.FakeStoreProductDto;
 import com.poductservice.productservice.dtos.GenericProductDto;
 import com.poductservice.productservice.exceptions.ProductNotFoundException;
 import com.poductservice.productservice.thirdPartyClients.ThirdPartyInterface;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
@@ -15,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
-
+@Slf4j
 @Component
 public class FakeStoreClient implements ThirdPartyInterface {
     private final RestTemplateBuilder restTemplateBuilder;
@@ -30,8 +32,10 @@ public class FakeStoreClient implements ThirdPartyInterface {
         this.specificProductUrl = fakeStoreUrl + pathForProducts + "/{id}";
     }
 
+    @ExecutionTimeLogger
     @Override
     public FakeStoreProductDto getProductById(Long id) throws ProductNotFoundException {
+        log.info("Inside getProductById()");
         RestTemplate restTemplate = this.restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDto> responseEntity
                 = restTemplate.getForEntity(specificProductUrl, FakeStoreProductDto.class, id);
@@ -42,6 +46,7 @@ public class FakeStoreClient implements ThirdPartyInterface {
         return responseEntity.getBody();
     }
 
+    @ExecutionTimeLogger
     @Override
     public List<FakeStoreProductDto> getAllProducts() throws ProductNotFoundException {
         RestTemplate restTemplate = this.restTemplateBuilder.build();
@@ -54,6 +59,7 @@ public class FakeStoreClient implements ThirdPartyInterface {
         return Arrays.asList(responseEntity.getBody());
     }
 
+    @ExecutionTimeLogger
     @Override
     public FakeStoreProductDto deleteProductById(Long id) throws ProductNotFoundException {
         RestTemplate restTemplate = this.restTemplateBuilder.build();
@@ -67,6 +73,7 @@ public class FakeStoreClient implements ThirdPartyInterface {
         return responseEntity.getBody();
     }
 
+    @ExecutionTimeLogger
     @Override
     public FakeStoreProductDto createProduct(GenericProductDto genericProductDto) throws ProductNotFoundException {
         RestTemplate restTemplate = this.restTemplateBuilder.build();
@@ -80,6 +87,7 @@ public class FakeStoreClient implements ThirdPartyInterface {
         return responseEntity.getBody();
     }
 
+    @ExecutionTimeLogger
     @Override
     public FakeStoreProductDto updateProductById(Long id) throws ProductNotFoundException {
         FakeStoreProductDto genericProductDto = getProductById(id);

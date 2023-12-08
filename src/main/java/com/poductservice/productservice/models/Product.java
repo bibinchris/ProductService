@@ -14,7 +14,11 @@ public class Product extends BaseModel{
     @ManyToOne
     private Category category;
 
-    @OneToOne(optional = false)
+    /**
+     * CascadeType.REMOVE = if the product is deleted
+     * from database price will be automatically deleted.
+     */
+    @OneToOne(cascade = CascadeType.REMOVE, optional = false)
     @JoinColumn(nullable = false)
     private Price price;
 
