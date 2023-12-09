@@ -60,7 +60,7 @@ public class ProductServiceApplication implements CommandLineRunner {
 //        testInheritanceRelations();
 //        saveRecordsInDB();
 //        fetchCategoryFromDB();
-        fetchProductFromDB();
+//        fetchProductFromDB();
     }
 
 
