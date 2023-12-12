@@ -14,12 +14,14 @@ public class ProductControllerTest {
     ProductController productController;
 
     @Test
+    void testGetProductById() throws ProductNotFoundException {
+        assertNotNull(productController.getProductById(1L));
+    }
+
+    @Test
     void testGetProductById_Exception(){
        assertThrows(ProductNotFoundException.class, ()->productController.getProductById(1000L));
     }
 
-    @Test
-    void testGetProductById() throws ProductNotFoundException {
-        assertNotNull(productController.getProductById(1L));
-    }
+
 }
