@@ -1,18 +1,16 @@
 package com.poductservice.productservice.controllers;
 
-import com.poductservice.productservice.dtos.FakeStoreProductDto;
 import com.poductservice.productservice.dtos.GenericProductDto;
 import com.poductservice.productservice.exceptions.ProductNotFoundException;
-import com.poductservice.productservice.services.FakeStoreProductService;
 import com.poductservice.productservice.services.ProductService;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.util.Assert;
 
 
 @SpringBootTest
@@ -23,6 +21,9 @@ public class ProductControllerTest {
 
     @Mock
     ProductService productService;
+
+    @Captor
+    private ArgumentCaptor<Long> argumentCaptor;
 
     @Test
     void testGetProductById() throws ProductNotFoundException {
@@ -52,6 +53,17 @@ public class ProductControllerTest {
         Mockito.when(productService.getProductById(Mockito.anyLong())).thenThrow(ProductNotFoundException.class);
 
         Assertions.assertThrows(ProductNotFoundException.class, ()->productController.getProductById(10010L));
+    }
+
+    @Test
+    public void testProductControllerCallsProductServiceWithSameId() throws ProductNotFoundException {
+        //This is the test case to check ProductController is passing same id to ProductService
+        Long id = 100l;
+        productController = new ProductController(productService);
+        Mockito.when(productService.getProductById(id)).thenReturn(GenericProductDto.builder().build());
+        GenericProductDto genericProductDto = productController.getProductById(id);
+        Mockito.verify(productService).getProductById(argumentCaptor.capture());
+        Assertions.assertEquals(id, argumentCaptor.getValue());
     }
 
     private GenericProductDto convertToGenericProductDto() {

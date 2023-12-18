@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.hamcrest.*;
+
 //It won't initiate unnecessary dependencies.
 @WebMvcTest(ProductController.class)
 @AutoConfigureMockMvc
@@ -65,6 +67,9 @@ public class  ProductControllerWebMVCTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(productToCreate)))
                 .andExpect(MockMvcResultMatchers.status().is(200))
-                .andExpect(MockMvcResultMatchers.content().string(objectMapper.writeValueAsString(productToCreate)));
+                .andExpect(MockMvcResultMatchers.content().string(objectMapper.writeValueAsString(productToCreate)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title", Matchers.is("MackBook")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(15000.0)));
     }
+
 }
