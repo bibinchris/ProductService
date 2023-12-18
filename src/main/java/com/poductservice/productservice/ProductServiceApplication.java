@@ -21,16 +21,16 @@ import java.util.UUID;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
-public class ProductServiceApplication implements CommandLineRunner {
+public class ProductServiceApplication {//implements CommandLineRunner {
 
-    private final MentorRepository mentorRepository;
-    private final StudentRepository studentRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
-    private final ProductRepository productRepository;
-    private final PriceRepository priceRepository;
+//    private MentorRepository mentorRepository;
+//    private StudentRepository studentRepository;
+//    private UserRepository userRepository;
+//    private CategoryRepository categoryRepository;
+//    private ProductRepository productRepository;
+//    private PriceRepository priceRepository;
 
-    public ProductServiceApplication(@Qualifier("st_mentorrepository") MentorRepository mentorRepository,
+    /*public ProductServiceApplication(@Qualifier("st_mentorrepository") MentorRepository mentorRepository,
                                      @Qualifier("st_studentrepository") StudentRepository studentRepository,
                                      @Qualifier("st_userrepository") UserRepository userRepository,
                                      CategoryRepository categoryRepository,
@@ -42,33 +42,36 @@ public class ProductServiceApplication implements CommandLineRunner {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.priceRepository = priceRepository;
-    }
+    }*/
 
-
+//    public ProductServiceApplication() {
+//    }
+//
     public static void main(String[] args) {
         SpringApplication.run(ProductServiceApplication.class, args);
     }
 
     /**
      * in lazy loading data will be only fetch when we call it explicitly
-     * @Transactional is used to call lazy loading explicitly
+     *
      * @param args
+     * @Transactional is used to call lazy loading explicitly
      */
-    @Transactional
+   /* @Transactional
     @Override
     public void run(String... args) {
 //        testInheritanceRelations();
 //        saveRecordsInDB();
 //        fetchCategoryFromDB();
 //        fetchProductFromDB();
-    }
+    }*/
 
 
-    private void saveRecordsInDB() {
+    /*private void saveRecordsInDB() {
         Category category = new Category();
         category.setName("Apple Device");
 
-        Category savedCategory= categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(category);
 
         Price price = new Price();
         price.setCurrency("INR");
@@ -84,40 +87,41 @@ public class ProductServiceApplication implements CommandLineRunner {
     }
 
 
-    public void fetchCategoryFromDB(){
+    public void fetchCategoryFromDB() {
         Optional<Category> allCategory = categoryRepository.findById(UUID.fromString("4856ef34-15e5-4488-b478-65efec9aa1b9"));
-        Category category =  allCategory.get();
+        Category category = allCategory.get();
         System.out.println("category.getName() = " + category.getName());
         System.out.println("getDescription = " + category.getProducts().get(0).getDescription());
     }
 
 
-    public void fetchProductFromDB(){
+    public void fetchProductFromDB() {
         List<Product> allCategory = productRepository.findAll();
-        for(Product p : allCategory){
+        for (Product p : allCategory) {
             System.out.println("p1 = " + p.getDescription());
         }
 
         List<Product> allCategory1 = productRepository.findByTittle("iPhone 15");
-        for(Product p : allCategory1){
+        for (Product p : allCategory1) {
             System.out.println("p2 = " + p.getDescription());
         }
 
         List<Product> allCategory2 = productRepository.findByTittleAndDescription("iPhone 15", "Best iPhone ever");
-        for(Product p : allCategory2){
+        for (Product p : allCategory2) {
             System.out.println("p3 = " + p.getDescription());
         }
 
         List<Product> allCategory3 = productRepository.findByPrice_ValueGreaterThan(50000);
-        for(Product p : allCategory3){
+        for (Product p : allCategory3) {
             System.out.println("p4 = " + p.getDescription());
         }
 
         List<Product> allCategory4 = productRepository.findAllProductByCustomQuery();
-        for(Product p : allCategory4){
+        for (Product p : allCategory4) {
             System.out.println("p4 = " + p.getDescription());
         }
     }
+
     private void testInheritanceRelations() {
         Mentor mentor = new Mentor();
         mentor.setName("Bibin");
@@ -139,6 +143,6 @@ public class ProductServiceApplication implements CommandLineRunner {
 
         List<User> userList = userRepository.findAll();
 
-        userList.forEach(User-> System.out.println(user));
-    }
+        userList.forEach(User -> System.out.println(user));
+    }*/
 }

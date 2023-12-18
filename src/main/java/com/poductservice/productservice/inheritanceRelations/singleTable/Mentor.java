@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 @Entity(name="st_mentors")
 @DiscriminatorValue(value = "1")
-public class Mentor extends User {
+public class  Mentor extends User {
     private double avgRating;
 }
