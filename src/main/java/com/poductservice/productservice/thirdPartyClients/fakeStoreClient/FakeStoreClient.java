@@ -32,7 +32,6 @@ public class FakeStoreClient implements ThirdPartyInterface {
         this.specificProductUrl = fakeStoreUrl + pathForProducts + "/{id}";
     }
 
-    @ExecutionTimeLogger
     @Override
     public FakeStoreProductDto getProductById(Long id) throws ProductNotFoundException {
         log.info("Inside getProductById()");

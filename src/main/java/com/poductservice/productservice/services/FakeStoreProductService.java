@@ -1,10 +1,13 @@
 package com.poductservice.productservice.services;
 
+import com.poductservice.productservice.aop.*;
 import com.poductservice.productservice.dtos.FakeStoreProductDto;
 import com.poductservice.productservice.dtos.GenericProductDto;
 import com.poductservice.productservice.exceptions.ProductNotFoundException;
 import com.poductservice.productservice.thirdPartyClients.fakeStoreClient.FakeStoreClient;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,13 +16,23 @@ import java.util.List;
 public class FakeStoreProductService implements ProductService{
 
     private final FakeStoreClient fakeStoreAdaptor;
-    public FakeStoreProductService(FakeStoreClient fakeStoreAdaptor) {
+    private RedisTemplate<String, FakeStoreProductDto> redisTemplate;
+
+    @Autowired
+    public FakeStoreProductService(FakeStoreClient fakeStoreAdaptor, RedisTemplate redisTemplate) {
         this.fakeStoreAdaptor = fakeStoreAdaptor;
+        this.redisTemplate = redisTemplate;
     }
 
+    @ExecutionTimeLogger
     @Override
     public GenericProductDto getProductById(Long id) throws ProductNotFoundException {
-        return convertToGenericProductDto(this.fakeStoreAdaptor.getProductById(id));
+        FakeStoreProductDto fakeStoreProductDto = (FakeStoreProductDto) redisTemplate.opsForHash().get("Product", id);
+        if(fakeStoreProductDto==null){
+            fakeStoreProductDto = this.fakeStoreAdaptor.getProductById(id);
+            redisTemplate.opsForHash().put("Product", id, fakeStoreProductDto);
+        }
+        return convertToGenericProductDto(fakeStoreProductDto);
     }
 
     @Override
