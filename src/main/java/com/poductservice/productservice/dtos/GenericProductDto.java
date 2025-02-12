@@ -1,5 +1,6 @@
 package com.poductservice.productservice.dtos;
 
+import com.poductservice.productservice.models.*;
 import lombok.*;
 
 @Data

@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.redis.core.*;
+
+import java.io.*;
 
 @Data
 @AllArgsConstructor
-public class FakeStoreProductDto {
+public class FakeStoreProductDto implements Serializable{
     //DTO : Data Transfer Object
     private Long id;
     private String title;
